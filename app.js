@@ -13,17 +13,18 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
-//app.use(cors({
-//  origin: ['https://diplom.nomoredomains.xyz', 'http://diplom.nomoredomains.xyz'],
-//  allowedHeaders: ['Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'Content-Type'],
-//  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-//  credentials: true,
-//}));
+//  app.use(cors({
+//    origin: ['https://diplom.nomoredomains.xyz', 'http://diplom.nomoredomains.xyz'],
+// eslint-disable-next-line max-len
+//    allowedHeaders: ['Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'Content-Type'],
+//    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+//    credentials: true,
+//  }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
 }, (err) => {
   if (err) {
@@ -33,11 +34,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
 
 app.use(requestLogger);
 
-//app.get('/crash-test', () => {
-//  setTimeout(() => {
-//    throw new Error('Сервер сейчас упадёт');
-//  }, 0);
-//});
+//  app.get('/crash-test', () => {
+//    setTimeout(() => {
+//      throw new Error('Сервер сейчас упадёт');
+//    }, 0);
+//  });
 
 app.post(
   '/signin',
@@ -64,14 +65,14 @@ app.use(auth);
 app.use('/users', require('./routes/user'));
 app.use('/movies', require('./routes/movie'));
 
-//app.post('/signout', (req, res) => {
-//  res.status(200).clearCookie('jwt', {
-//    domain: '.diplom.nomoredomains.xyz',
-//    httpOnly: true,
-//    sameSite: true,
-//    secure: true,
-//  }).send({ message: 'Выход' });
-//});
+//  app.post('/signout', (req, res) => {
+//    res.status(200).clearCookie('jwt', {
+//      domain: '.diplom.nomoredomains.xyz',
+//      httpOnly: true,
+//      sameSite: true,
+//      secure: true,
+//    }).send({ message: 'Выход' });
+//  });
 
 app.use((req, res, next) => {
   next(new NotFoundError('Запрашиваемая страница не найдена'));
