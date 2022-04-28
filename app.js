@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
 }, (err) => {
   if (err) {
@@ -67,9 +67,9 @@ app.use('/movies', require('./routes/movie'));
 app.post('/signout', (req, res) => {
   res.status(200).clearCookie('jwt', {
     domain: '.diplom.nomoredomains.xyz',
-    httpOnly: true,
-    sameSite: true,
-    secure: true,
+    httpOnly: false,
+    sameSite: false,
+    secure: false,
   }).send({ message: 'Выход' });
 });
 

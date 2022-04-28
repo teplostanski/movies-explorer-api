@@ -70,8 +70,9 @@ module.exports.login = (req, res, next) => {
         .cookie('jwt', token, {
           domain: '.diplom.nomoredomains.xyz',
           maxAge: week,
-          httpOnly: true,
-          sameSite: true,
+          httpOnly: false,
+          sameSite: false,
+          secure: false,
         })
         .send({ message: 'Логин прошел успешно' });
     })
