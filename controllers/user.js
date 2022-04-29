@@ -6,7 +6,6 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 const InternalError = require('../errors/internal-err');
 const NotFoundError = require('../errors/not-found-err');
-const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
 
 module.exports.getUserInfo = (req, res, next) => {
@@ -48,7 +47,7 @@ module.exports.updateUserInfo = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new ConflictError(`Пользователь с таким email: ${email} уже зарегестрирован`));
       } else {
         next(new InternalError());
       }
