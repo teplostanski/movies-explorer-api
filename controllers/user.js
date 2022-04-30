@@ -46,7 +46,7 @@ module.exports.updateUserInfo = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError' || err.code === 11000) {
         next(new ConflictError(`Пользователь с таким email: ${email} уже зарегестрирован`));
       } else {
         next(new InternalError());
@@ -67,7 +67,7 @@ module.exports.login = (req, res, next) => {
       );
       res
         .cookie('jwt', token, {
-          domain: '.diplom.nomoredomains.xyz',
+          domain: NODE_ENV === 'production' ? '.diplom.nomoredomains.xyz' : undefined,
           maxAge: week,
           httpOnly: false,
           sameSite: false,

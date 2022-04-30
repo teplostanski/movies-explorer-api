@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "REST API сервиса поска фильмов",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",

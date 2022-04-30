@@ -2,14 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { errors, celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { login, createUser } = require('./controllers/user');
 const auth = require('./middlewares/auth');
 // const regExp = require('./utils/regexp');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+const { NODE_ENV } = process.env;
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect('mongodb://127.0.0.1:27017/moviesdb', {
   useNewUrlParser: true,
 }, (err) => {
   if (err) {
@@ -38,35 +39,15 @@ app.use(requestLogger);
 //      throw new Error('Сервер сейчас упадёт');
 //    }, 0);
 //  });
+app.use(require('./routes/index'));
 
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    }),
-  }),
-  login,
-);
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-      name: Joi.string().min(2).max(30).required(),
-    }),
-  }),
-  createUser,
-);
 app.use(auth);
-app.use('/users', require('./routes/user'));
-app.use('/movies', require('./routes/movie'));
+app.use(require('./routes/user'));
+app.use(require('./routes/movie'));
 
 app.post('/signout', (req, res) => {
   res.status(200).clearCookie('jwt', {
-    domain: '.diplom.nomoredomains.xyz',
+    domain: NODE_ENV === 'production' ? '.diplom.nomoredomains.xyz' : undefined,
     httpOnly: false,
     sameSite: false,
     secure: false,

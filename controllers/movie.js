@@ -5,7 +5,7 @@ const InternalError = require('../errors/internal-err');
 const NotFoundError = require('../errors/not-found-err');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => res.send({ movies }))
     .catch(() => next(new InternalError()));
 };
