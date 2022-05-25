@@ -15,7 +15,7 @@ const { NODE_ENV } = process.env;
 const app = express();
 
 app.use(cors({
-  origin: ['https://diplom.nomoredomains.xyz', 'http://diplom.nomoredomains.xyz'],
+  origin: ['https://diplom.nomoredomains.xyz', 'http://diplom.nomoredomains.xyz', 'http://localhosh:3000'],
   allowedHeaders: ['Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'Content-Type'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
@@ -34,11 +34,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/moviesdb', {
 
 app.use(requestLogger);
 
-//  app.get('/crash-test', () => {
-//    setTimeout(() => {
-//      throw new Error('Сервер сейчас упадёт');
-//    }, 0);
-//  });
 app.use(require('./routes/index'));
 
 app.use(auth);
